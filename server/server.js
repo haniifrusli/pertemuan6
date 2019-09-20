@@ -122,42 +122,75 @@ app.get('/findAllFilter', async function (req, res) {
 })
 
 // Delete One
-app.get('/deleteOne', function (req, res) {
-  MongoClient.connect(dbUrl, dbOption, function(err, db) {
-    if (err) throw err
-    var dbo = db.db("mydb")
+app.get('/deleteOne', async function (req, res) {
+  // MongoClient.connect(dbUrl, dbOption, function(err, db) {
+  //   if (err) throw err
+  //   var dbo = db.db("mydb")
+  //   var myquery = { 
+  //     name: 'Company Inc 2' 
+  //   }
+  //   dbo.collection("customers").deleteOne(myquery, function(err, obj) {
+  //     if (err) throw err
+  //     db.close()
+  //     res.send("1 document deleted")
+  //   })
+  // })
+  try {
     var myquery = { 
       name: 'Company Inc 2' 
     }
-    dbo.collection("customers").deleteOne(myquery, function(err, obj) {
-      if (err) throw err
-      db.close()
-      res.send("1 document deleted")
-    })
-  })
+    await Customers.deleteOne(myquery)
+    res.send("1 document deleted")
+  } catch (error) {
+    console.log('Error')
+  }
 })
 
 // Delete Many
-app.get('/deleteMany', function (req, res) {
-  MongoClient.connect(dbUrl, dbOption, function(err, db) {
-    if (err) throw err
-    var dbo = db.db("mydb")
+app.get('/deleteMany', async function (req, res) {
+  // MongoClient.connect(dbUrl, dbOption, function(err, db) {
+  //   if (err) throw err
+  //   var dbo = db.db("mydb")
+  //   var myquery = { 
+  //     address: "Highway 37 2"
+  //   }
+  //   dbo.collection("customers").deleteMany(myquery, function(err, obj) {
+  //     if (err) throw err
+  //     db.close()
+  //     res.send(obj.result.n + " document(s) deleted")
+  //   })
+  // })
+  try {
     var myquery = { 
       address: "Highway 37 2"
     }
-    dbo.collection("customers").deleteMany(myquery, function(err, obj) {
-      if (err) throw err
-      db.close()
-      res.send(obj.result.n + " document(s) deleted")
-    })
-  })
+    var result = await Customers.deleteMany(myquery)
+    res.send(result.n + " document(s) deleted")
+  } catch (error) {
+    console.log('Error')
+  }
 })
 
 // Update One
-app.get('/updateOne', function (req, res) {
-  MongoClient.connect(dbUrl, dbOption, function(err, db) {
-    if (err) throw err
-    var dbo = db.db("mydb")
+app.get('/updateOne', async function (req, res) {
+  // MongoClient.connect(dbUrl, dbOption, function(err, db) {
+  //   if (err) throw err
+  //   var dbo = db.db("mydb")
+  //   var myquery = { 
+  //     address: "Highway 37 2" 
+  //   }
+  //   var newvalues = { 
+  //     $set: {
+  //       name: "Mickey"
+  //     } 
+  //   }
+  //   dbo.collection("customers").updateOne(myquery, newvalues, function(err, resDB) {
+  //     if (err) throw err
+  //     db.close()
+  //     res.send("1 document updated")
+  //   })
+  // })
+  try {
     var myquery = { 
       address: "Highway 37 2" 
     }
@@ -166,34 +199,47 @@ app.get('/updateOne', function (req, res) {
         name: "Mickey"
       } 
     }
-    dbo.collection("customers").updateOne(myquery, newvalues, function(err, resDB) {
-      if (err) throw err
-      db.close()
-      res.send("1 document updated")
-    })
-  })
+    await Customers.updateOne(myquery, newvalues)
+    res.send("1 document updated")
+  } catch (error) {
+    console.log('Error')
+  }
 })
 
 // Update Many
-app.get('/updateMany', function (req, res) {
-  MongoClient.connect(dbUrl, dbOption, function(err, db) {
-    if (err) throw err
-    var dbo = db.db("mydb")
+app.get('/updateMany', async function (req, res) {
+  // MongoClient.connect(dbUrl, dbOption, function(err, db) {
+  //   if (err) throw err
+  //   var dbo = db.db("mydb")
+  //   var myquery = { 
+  //     address: "Highway 37 2",
+  //     name: "Company Inc"
+  //   }
+  //   var newvalues = {
+  //     $set: {
+  //       name: "Minnie s"
+  //     } 
+  //   }
+  //   dbo.collection("customers").updateMany(myquery, newvalues, function(err, resDB) {
+  //     if (err) throw err
+  //     db.close()
+  //     res.send(resDB.result.nModified + " document(s) updated")
+  //   })
+  // })
+  try {
     var myquery = { 
-      address: "Highway 37 2",
-      name: "Company Inc"
+      name: "Company Inc 2"
     }
     var newvalues = {
       $set: {
         name: "Minnie s"
       } 
     }
-    dbo.collection("customers").updateMany(myquery, newvalues, function(err, resDB) {
-      if (err) throw err
-      db.close()
-      res.send(resDB.result.nModified + " document(s) updated")
-    })
-  })
+    var result = await Customers.updateMany(myquery, newvalues)
+    res.send(result.nModified + " document(s) updated")
+  } catch (error) {
+    res.send('Error')
+  }
 })
 
 app.listen(3000, function () {
